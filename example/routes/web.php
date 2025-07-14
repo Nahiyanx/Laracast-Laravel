@@ -9,18 +9,20 @@ Route::get('/', function () {
     return view('home');
 });
 
-
 Route::get('/jobs', function () {
-    return view('jobs', [ 
-        
-        'jobs' => Job::all() ]);
+    $jobs = Job::with('employer')->cursorPaginate(10); //paginate(3);
+    return view('jobs.index', [ 
+        'jobs' => $jobs 
+    ]);
 });
 
+Route::get('/jobs/create', function () {
+    return view('jobs.create');
+});
 
 Route::get('/jobs/{id}', function ($id){
-
     $job = Job::find($id);
-    return view('job', ['job' => $job]);
+    return view('jobs.show', ['job' => $job]);
 });
 
 Route::get('/contact', function () {
